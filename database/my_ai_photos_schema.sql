@@ -1,7 +1,6 @@
 
 CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  username VARCHAR(25),
+  username VARCHAR(25) PRIMARY KEY,
   password TEXT NOT NULL, 
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
@@ -9,10 +8,10 @@ CREATE TABLE users (
 );
 
 CREATE TABLE prompts (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
+  prompt_id SERIAL PRIMARY KEY,
+  username varchar(25) references users(username),
+  title text NOT NULL,
   date DATE NOT NULL,
   prompt_text TEXT NOT NULL,
-  comments TEXT NOT NULL,
-  user_id integer REFERENCES users(id) 
+  comments TEXT NOT NULL
 );
