@@ -18,20 +18,38 @@ VALUES (
         'Markus',
         'Barkus',
         'markus@test.com'
+    ), (
+        'bunners',
+        '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
+        'Bun',
+        'Bunnterton',
+        'thebigbun@test.com'
     );
 
 INSERT INTO
-prompts (
-    name,
-    date,
-    prompt_text,
-    comments,
-    user_id
-),
-(
-    "Business Men",
-    CURRENT_DATE,
-    'Create a picture of businessmen meeting and striking a deal',
-    'I get better pictures when I am more specific.',
-    1
-)
+    prompts (
+        name,
+        date,
+        prompt_text,
+        comments,
+        user_id
+    )
+VALUES (
+        'Business Men',
+        CURRENT_DATE,
+        'Create a picture of businessmen meeting and striking a deal',
+        'I get better pictures when I am more specific.',
+        1
+    ), (
+        'Flowers',
+        CURRENT_DATE,
+        'Create a picture of a field of flowers with a tree in the middle',
+        'Need to refine this more.',
+        2
+    ), (
+        'Bunnies',
+        CURRENT_DATE,
+        'Create a picture of a rabbits hanging around a garden',
+        'Maybe next time try hanging out in a field?',
+        3
+    );

@@ -10,7 +10,7 @@ CREATE TABLE users (
 
 CREATE TABLE prompts (
   id SERIAL PRIMARY KEY,
-  name TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
   date DATE NOT NULL,
   prompt_text TEXT NOT NULL,
   comments TEXT NOT NULL,
