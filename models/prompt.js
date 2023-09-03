@@ -13,13 +13,15 @@ class Prompt {
     const result = await db.query(
           `INSERT INTO prompts (username,
                              title,
+                             date,
                              prompt_text,
                              comments)
-           VALUES ($1, $2, $3, $4)
-           RETURNING prompt_id AS "promptID", date, username, title, date, prompt_text AS "promptText, comments`,
+           VALUES ($1, $2, $3, $4, $5)
+           RETURNING prompt_id AS "promptID", date, username, title, date, prompt_text AS "promptText", comments`,
         [
           data.username,
           data.title,
+          data.date,
           data.prompt_text,
           data.comments,
         ]);
@@ -35,11 +37,10 @@ class Prompt {
                         p.prompt_id as "promptID",
                         p.title,
                         p.date,
-                        p.prompt_text as "promptText,
+                        p.prompt_text as "promptText",
                         p.comments
                   FROM prompts p 
-                  WHERE username = $1
-                  LEFT JOIN users u ON u.username = p.username`, [username]);
+                  WHERE username = $1`, [username]);
     
     const prompts = result.rows;
     return prompts;
@@ -52,12 +53,15 @@ class Prompt {
           `SELECT p.prompt_id as "promptID",
                   p.title,
                   p.date,
-                  p.prompt_text as "promptText,"
+                  p.prompt_text as "promptText",
                   p.comments
-           FROM prompts
+           FROM prompts p
            WHERE prompt_id = $1`, [id]);
 
     const prompt = result.rows[0];
+
+    if (!prompt) throw new NotFoundError("A prompt with that id was not found.")
+
     return prompt;
   }
 
@@ -66,12 +70,14 @@ class Prompt {
   static async update(id, data) {
     const { setCols, values } = sqlForPartialUpdate(
         data,
-        {});
+        {
+          promptText: "prompt_text"
+        });
     const idVarIdx = "$" + (values.length + 1);
 
     const querySql = `UPDATE prompts 
                       SET ${setCols} 
-                      WHERE id = ${idVarIdx} 
+                      WHERE prompt_id = ${idVarIdx} 
                       RETURNING p.prompt_id as "promptID",
                                 p.title,
                                 p.date,

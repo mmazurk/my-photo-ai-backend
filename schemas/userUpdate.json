@@ -1,0 +1,53 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "title": "Root Schema",
+    "type": "object",
+    "default": {},
+    "required": [
+        "username",
+        "firstName",
+        "lastName",
+        "email"
+    ],
+    "properties": {
+        "username": {
+            "title": "The username Schema",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "testuser"
+            ]
+        },
+        "firstName": {
+            "title": "The firstName Schema",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "Test"
+            ]
+        },
+        "lastName": {
+            "title": "The lastName Schema",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "Useruseron"
+            ]
+        },
+        "email": {
+            "title": "The email Schema",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "user2@user.com"
+            ]
+        }
+    },
+    "examples": [{
+        "username": "testuser",
+        "firstName": "Test",
+        "lastName": "Useruseron",
+        "email": "user2@user.com"
+    }]
+}

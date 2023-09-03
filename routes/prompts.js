@@ -7,11 +7,9 @@ const jsonschema = require("jsonschema");
 const express = require("express");
 const { BadRequestError } = require("../expressError");
 const { ensureLoggedIn } = require("../middleware/auth");
-const Job = require("../models/job");
 const newPromptSchema = require("../schemas/newPrompt.json");
-const postSearchSchema = require("../schemas/newSearch.json");
 const promptUpdateSchema = require("../schemas/updatePrompt.json")
-
+const Prompt = require("../models/prompt")
 const router = express.Router({ mergeParams: true });
 
 
@@ -35,16 +33,10 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 /** GET route to retieve all prompts */
 
 router.get("/", ensureLoggedIn, async function (req, res, next) {
-  try {
-    const validator = jsonschema.validate(req.body, postSearchSchema);
-    if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
-      throw new BadRequestError(errs);
-    }
 
     // Note that res.local.user is set in the middleware function 'authenticateJWT'
     // This is middleware that runs in between every request and response
-
+  try {
     const username = res.locals.user;
     const prompts = await Prompt.getAll(username);
     return res.json({ prompts });

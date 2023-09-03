@@ -3,7 +3,6 @@
 /** Routes for users. */
 
 const jsonschema = require("jsonschema");
-
 const express = require("express");
 const { ensureCorrectUser } = require("../middleware/auth");
 const { BadRequestError } = require("../expressError");

@@ -1,0 +1,53 @@
+{
+    "$schema": "https://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "title": "Root Schema",
+    "type": "object",
+    "default": {},
+    "required": [
+        "username",
+        "title",
+        "prompt_text",
+        "comments"
+    ],
+    "properties": {
+        "username": {
+            "title": "The username Schema",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "testuser"
+            ]
+        },
+        "title": {
+            "title": "The title Schema",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "This is a Prompt Title"
+            ]
+        },
+        "prompt_text": {
+            "title": "The prompt_text Schema",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "This is prompt text which may be longer than just a title would be. There might alos be multiple sentences."
+            ]
+        },
+        "comments": {
+            "title": "The comments Schema",
+            "type": "string",
+            "default": "",
+            "examples": [
+                "These are comments about the images that were generated using the prompt and may also be longer. Or multiple sentences."
+            ]
+        }
+    },
+    "examples": [{
+        "username": "testuser",
+        "title": "This is a Prompt Title",
+        "prompt_text": "This is prompt text which may be longer than just a title would be. There might alos be multiple sentences.",
+        "comments": "These are comments about the images that were generated using the prompt and may also be longer. Or multiple sentences."
+    }]
+}

@@ -24,7 +24,7 @@ afterAll(commonAfterAll);
 /************************************** authenticate */
 
 describe("authenticate", function () {
-  test("works", async function () {
+  test("authentication works", async function () {
     const user = await User.authenticate("u1", "password1");
     expect(user).toEqual({
       username: "u1",
@@ -63,7 +63,7 @@ describe("register", function () {
     email: "test@test.com"
   };
 
-  test("works", async function () {
+  test("registration works", async function () {
     let user = await User.register({
       ...newUser,
       password: "password",
@@ -71,7 +71,6 @@ describe("register", function () {
     expect(user).toEqual(newUser);
     const found = await db.query("SELECT * FROM users WHERE username = 'new'");
     expect(found.rows.length).toEqual(1);
-    expect(found.rows[0].is_admin).toEqual(false);
     expect(found.rows[0].password.startsWith("$2b$")).toEqual(true);
   });
 
@@ -93,10 +92,10 @@ describe("register", function () {
   });
 });
 
-/************************************** findAll */
+// /************************************** findAll */
 
 describe("findAll", function () {
-  test("works", async function () {
+  test("th findAll function works", async function () {
     const users = await User.findAll();
     expect(users).toEqual([
       {
@@ -114,16 +113,17 @@ describe("findAll", function () {
   });
 });
 
-/************************************** get */
+// /************************************** get */
 
 describe("get", function () {
-  test("works", async function () {
+  test("the get function works", async function () {
     let user = await User.get("u1");
     expect(user).toEqual({
       username: "u1",
       firstName: "U1F",
       lastName: "U1L",
-      email: "u1@email.com"
+      email: "u1@email.com",
+      prompts: [expect.any(Number), expect.any(Number)]
     });
   });
 
@@ -137,7 +137,7 @@ describe("get", function () {
   });
 });
 
-/************************************** update */
+// /************************************** update */
 
 describe("update", function () {
   const updateData = {
@@ -146,7 +146,7 @@ describe("update", function () {
     email: "new@email.com"
   };
 
-  test("works", async function () {
+  test("updating a user works", async function () {
     let user = await User.update("u1", updateData);
     expect(user).toEqual({
       username: "u1",
@@ -154,7 +154,7 @@ describe("update", function () {
     });
   });
 
-  test("works: set password", async function () {
+  test("works: setting a new password", async function () {
     let user = await User.update("u1", {
       password: "new",
     });
@@ -191,7 +191,7 @@ describe("update", function () {
   });
 });
 
-/************************************** remove */
+// /************************************** remove */
 
 describe("remove", function () {
   test("works", async function () {

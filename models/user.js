@@ -119,7 +119,7 @@ class User {
     if (!user) throw new NotFoundError(`No user: ${username}`);
 
     const userPrompts = await db.query(
-          `SELECT a.prompt_id
+          `SELECT p.prompt_id
            FROM prompts AS p
            WHERE p.username = $1`, [username]);
 

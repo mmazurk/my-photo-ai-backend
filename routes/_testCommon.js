@@ -5,8 +5,6 @@ const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
 const Prompt = require("../models/prompt.js");
 
-const testJobIds = [];
-
 async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM users");
@@ -73,8 +71,6 @@ module.exports = {
   commonBeforeEach,
   commonAfterEach,
   commonAfterAll,
-  testJobIds,
   u1Token,
-  u2Token,
-  adminToken,
+  u2Token
 };

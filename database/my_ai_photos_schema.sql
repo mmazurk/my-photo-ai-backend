@@ -9,7 +9,7 @@ CREATE TABLE users (
 
 CREATE TABLE prompts (
   prompt_id SERIAL PRIMARY KEY,
-  username varchar(25) references users(username),
+  username varchar(25) references users(username) ON DELETE CASCADE,
   title text NOT NULL,
   date DATE NOT NULL,
   prompt_text TEXT NOT NULL,
