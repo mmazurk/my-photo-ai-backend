@@ -5,11 +5,13 @@ const User = require("../models/user");
 const { createToken } = require("../helpers/tokens");
 const Prompt = require("../models/prompt.js");
 
+const testPromptIds = [];
+
 async function commonBeforeAll() {
   // noinspection SqlWithoutWhere
   await db.query("DELETE FROM users");
   // noinspection SqlWithoutWhere
-  await db.query("DELETE FROM posts");
+  await db.query("DELETE FROM prompts");
 
   await User.register({
     username: "u1",
@@ -33,18 +35,20 @@ async function commonBeforeAll() {
     password: "password3",
   });
 
-  await Prompt.create({
+  testPromptIds[0] = (await Prompt.create({
     username: "u1",    
     title: "Title Prompt Test 1",
+    date: "2022-02-02",
     prompt_text: "Prompt Text Test 1",
     comments: "Comment Text Test 1"
-  });
-  await Prompt.create({
+  })).promptID;
+  testPromptIds[1] = (await Prompt.create({
     username: "u1",    
     title: "Title Prompt Test 2",
+    date: "2022-02-02",
     prompt_text: "Prompt Text Test 2",
     comments: "Comment Text Test 2"
-  });
+  })).promptID;
 
 }
 
@@ -72,5 +76,6 @@ module.exports = {
   commonAfterEach,
   commonAfterAll,
   u1Token,
-  u2Token
+  u2Token,
+  testPromptIds
 };

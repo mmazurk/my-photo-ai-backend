@@ -5,7 +5,7 @@
 const jsonschema = require("jsonschema");
 
 const express = require("express");
-const { BadRequestError } = require("../expressError");
+const { BadRequestError, ExpressError, UnauthorizedError } = require("../expressError");
 const { ensureLoggedIn } = require("../middleware/auth");
 const newPromptSchema = require("../schemas/newPrompt.json");
 const promptUpdateSchema = require("../schemas/updatePrompt.json")
@@ -37,7 +37,7 @@ router.get("/", ensureLoggedIn, async function (req, res, next) {
     // Note that res.local.user is set in the middleware function 'authenticateJWT'
     // This is middleware that runs in between every request and response
   try {
-    const username = res.locals.user;
+    const username = res.locals.user.username;
     const prompts = await Prompt.getAll(username);
     return res.json({ prompts });
   } catch (err) {
@@ -49,8 +49,19 @@ router.get("/", ensureLoggedIn, async function (req, res, next) {
 
 router.get("/:id", ensureLoggedIn, async function (req, res, next) {
   try {
-    const prompt = await Prompt.get(req.params.id);
-    return res.json({ prompt });
+    const username = res.locals.user.username;
+    const prompts = await Prompt.getAll(username);
+    if (!prompts[0]) {
+      throw new BadRequestError("User has no prompts");
+    } else {
+      const promptIDs = prompts.map((item) => item.promptID);
+      if (promptIDs.includes(Number(req.params.id))) {
+        const prompt = await Prompt.get(req.params.id);
+        return res.json({ prompt });
+      } else {
+        throw new BadRequestError();
+      }
+    }
   } catch (err) {
     return next(err);
   }
@@ -63,12 +74,22 @@ router.patch("/:id", ensureLoggedIn, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, promptUpdateSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
-
-    const prompt = await Prompt.update(req.params.id, req.body);
-    return res.json({ prompt });
+    const username = res.locals.user.username;
+    const prompts = await Prompt.getAll(username);
+    if (!prompts[0]) {
+      throw new BadRequestError("User has no prompts");
+    } else {
+      const promptIDs = prompts.map((item) => item.promptID);
+      if (promptIDs.includes(Number(req.params.id))) {
+        const prompt = await Prompt.update(req.params.id, req.body);
+        return res.json({ prompt });
+      } else {
+        throw new BadRequestError();
+      }
+    }
   } catch (err) {
     return next(err);
   }
@@ -78,8 +99,19 @@ router.patch("/:id", ensureLoggedIn, async function (req, res, next) {
 
 router.delete("/:id", ensureLoggedIn, async function (req, res, next) {
   try {
-    await Prompt.remove(req.params.id);
-    return res.json({ deleted: +req.params.id });
+    const username = res.locals.user.username;
+    const prompts = await Prompt.getAll(username);
+    if (!prompts[0]) {
+      throw new BadRequestError("User has no prompts");
+    } else {
+      const promptIDs = prompts.map((item) => item.promptID);
+      if (promptIDs.includes(Number(req.params.id))) {
+        await Prompt.remove(req.params.id);
+        return res.json({ deleted: +req.params.id });
+      } else {
+        throw new BadRequestError();
+      }
+    }
   } catch (err) {
     return next(err);
   }

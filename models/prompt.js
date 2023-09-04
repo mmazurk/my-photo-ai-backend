@@ -1,7 +1,7 @@
 "use strict";
 
 const db = require("../db");
-const { NotFoundError} = require("../expressError");
+const { NotFoundError, BadRequestError} = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
 
 
@@ -68,6 +68,9 @@ class Prompt {
   /** Update prompt */
 
   static async update(id, data) {
+
+    if (!data) throw new BadRequestError('No data!')
+
     const { setCols, values } = sqlForPartialUpdate(
         data,
         {
@@ -78,15 +81,20 @@ class Prompt {
     const querySql = `UPDATE prompts 
                       SET ${setCols} 
                       WHERE prompt_id = ${idVarIdx} 
-                      RETURNING p.prompt_id as "promptID",
-                                p.title,
-                                p.date,
-                                p.prompt_text as "promptText,"
-                                p.comments`;
+                      RETURNING prompt_id as "promptID",
+                                title,
+                                date,
+                                prompt_text as "promptText",
+                                comments,
+                                username`;
     const result = await db.query(querySql, [...values, id]);
     const prompt = result.rows[0];
 
     if (!prompt) throw new NotFoundError(`No prompt: ${id}`);
+
+    if(prompt.date) {
+      prompt.date = prompt.date.toISOString().split('T')[0];
+    } 
 
     return prompt;
   }
@@ -97,8 +105,8 @@ class Prompt {
     const result = await db.query(
           `DELETE
            FROM prompts
-           WHERE id = $1
-           RETURNING id`, [id]);
+           WHERE prompt_id = $1
+           RETURNING prompt_id`, [id]);
     const prompt = result.rows[0];
 
     if (!prompt) throw new NotFoundError(`No prompt: ${id}`);

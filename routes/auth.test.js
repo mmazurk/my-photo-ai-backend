@@ -1,7 +1,6 @@
 "use strict";
 
 const request = require("supertest");
-
 const app = require("../app");
 
 const {
@@ -19,7 +18,7 @@ afterAll(commonAfterAll);
 /************************************** POST /auth/token */
 
 describe("POST /auth/token", function () {
-  test("works", async function () {
+  test("authorizaiton with token works", async function () {
     const resp = await request(app)
         .post("/auth/token")
         .send({
@@ -30,6 +29,11 @@ describe("POST /auth/token", function () {
       "token": expect.any(String),
     });
   });
+
+
+
+
+
 
   test("unauth with non-existent user", async function () {
     const resp = await request(app)
@@ -71,16 +75,16 @@ describe("POST /auth/token", function () {
   });
 });
 
-/************************************** POST /auth/register */
+// /************************************** POST /auth/register */
 
 describe("POST /auth/register", function () {
   test("works for anon", async function () {
     const resp = await request(app)
         .post("/auth/register")
         .send({
-          username: "new",
-          firstName: "first",
-          lastName: "last",
+          username: "new_user",
+          firstName: "new_first",
+          lastName: "new_last",
           password: "password",
           email: "new@email.com",
         });

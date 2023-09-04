@@ -40,6 +40,7 @@
             "title": "The email Schema",
             "type": "string",
             "default": "",
+            "format": "email",
             "examples": [
                 "user2@user.com"
             ]

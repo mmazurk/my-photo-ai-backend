@@ -45,7 +45,7 @@ describe("create", function () {
 
 /************************************** getAll */
 
-describe("getAll", function () {
+describe("get all prompts for a user", function () {
   test("get all promts works", async function () {
     let prompts = await Prompt.getAll('u2');
     expect(prompts).toEqual([
@@ -63,7 +63,7 @@ describe("getAll", function () {
 
 // /************************************** get */
 
-describe("get one", function () {
+describe("get a single prompt", function () {
   test("works", async function () {
     let prompt = await Prompt.get(`${testPromptIds[0]}`);
     expect(prompt).toEqual({
@@ -87,61 +87,59 @@ describe("get one", function () {
 
 // /************************************** update */
 
-// // BEFORE YOU TEST THIS, YOU NEED TO MODIFY THE PROMPT_ID TO BE testPromptIds[0]
+describe("update", function () {
+  let updateData = {
+    title: "Update1",
+    date: '2023-03-03',
+    promptText: "Updated Prompt Text1",
+    comments: "Updated Comments1"
+  };
+  test("update works", async function () {
+    let prompt = await Prompt.update(testPromptIds[0], updateData);
+    expect(prompt).toEqual({
+      promptID: testPromptIds[0],
+      username: "u1",
+      ...updateData,
+    });
+  });
 
-// describe("update", function () {
-//   let updateData = {
-//     title: "NewTitle1",
-//     date: '2023-03-03',
-//     promptText: "Updated Prompt Text1",
-//     comments: "Updated Comments1"
-//   };
-//   test("works", async function () {
-//     let prompt = await Prompt.update(1, updateData);
-//     expect(prompt).toEqual({
-//       prompt_id: 1,
-//       username: "u1",
-//       ...updateData,
-//     });
-//   });
+  test("not found if no such prompt", async function () {
+    try {
+      await Prompt.update(0, {
+        title: "test",
+      });
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
 
-//   test("not found if no such prompt", async function () {
-//     try {
-//       await Prompt.update(0, {
-//         title: "test",
-//       });
-//       fail();
-//     } catch (err) {
-//       expect(err instanceof NotFoundError).toBeTruthy();
-//     }
-//   });
-
-//   test("bad request with no data", async function () {
-//     try {
-//       await Prompt.update(0, {});
-//       fail();
-//     } catch (err) {
-//       expect(err instanceof BadRequestError).toBeTruthy();
-//     }
-//   });
-// });
+  test("bad request with no data", async function () {
+    try {
+      await Prompt.update(0, {});
+      fail();
+    } catch (err) {
+      expect(err instanceof BadRequestError).toBeTruthy();
+    }
+  });
+});
 
 // /************************************** remove */
 
-// describe("remove", function () {
-//   test("works", async function () {
-//     await Prompt.remove(1);
-//     const res = await db.query(
-//         "SELECT prompt_id FROM prompts WHERE id=$1", [1]);
-//     expect(res.rows.length).toEqual(0);
-//   });
+describe("remove", function () {
+  test("remove works", async function () {
+    await Prompt.remove(testPromptIds[0]);
+    const res = await db.query(
+        "SELECT prompt_id FROM prompts WHERE prompt_id=$1", [testPromptIds[0]]);
+    expect(res.rows.length).toEqual(0);
+  });
 
-//   test("not found if no such prompt", async function () {
-//     try {
-//       await Prompt.remove(0);
-//       fail();
-//     } catch (err) {
-//       expect(err instanceof NotFoundError).toBeTruthy();
-//     }
-//   });
-// });
+  test("not found if no such prompt", async function () {
+    try {
+      await Prompt.remove(0);
+      fail();
+    } catch (err) {
+      expect(err instanceof NotFoundError).toBeTruthy();
+    }
+  });
+});
