@@ -5,7 +5,7 @@
 const jsonschema = require("jsonschema");
 
 const express = require("express");
-const { BadRequestError, ExpressError, UnauthorizedError } = require("../expressError");
+const { BadRequestError, ExpressError, UnauthorizedError, NotFoundError } = require("../expressError");
 const { ensureLoggedIn } = require("../middleware/auth");
 const newPromptSchema = require("../schemas/newPrompt.json");
 const promptUpdateSchema = require("../schemas/updatePrompt.json")
@@ -87,7 +87,7 @@ router.patch("/:id", ensureLoggedIn, async function (req, res, next) {
         const prompt = await Prompt.update(req.params.id, req.body);
         return res.json({ prompt });
       } else {
-        throw new BadRequestError();
+        throw new NotFoundError("User does not own this prompt");
       }
     }
   } catch (err) {
@@ -109,7 +109,7 @@ router.delete("/:id", ensureLoggedIn, async function (req, res, next) {
         await Prompt.remove(req.params.id);
         return res.json({ deleted: +req.params.id });
       } else {
-        throw new BadRequestError();
+        throw new NotFoundError("User does not own this prompt");
       }
     }
   } catch (err) {

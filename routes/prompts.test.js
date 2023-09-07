@@ -124,93 +124,84 @@ describe("GET /prompts/:id", function () {
 
 // /************************************** PATCH /promnpts/:id */
 
-// describe("PATCH /prompts/:id", function () {
-//   test("works", async function () {
-//     const resp = await request(app)
-//         .patch(`/prompts/1`)
-//         .send({
-//           title: "Updated Title Prompt Test 1",
-//         })
-//         .set("authorization", `Bearer ${u1Token}`);
-//     expect(resp.body).toEqual({
-//       prompt: {
-//         id: 1,
-//         username: "u1",    
-//         title: "Updated Title Prompt Test 1",
-//         date: expect.any(Date),
-//         prompt_text: "Prompt Text Test 1",
-//         comments: "Comment Text Test 1"
-//       },
-//     });
-//   });
+describe("PATCH /prompts/:id", function () {
+  test("editing a prompt works", async function () {
+    const resp = await request(app)
+        .patch(`/prompts/${testPromptIds[0]}`)
+        .send({
+          title: "Updated Title Prompt Test 1",
+        })
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.body).toEqual({
+      prompt: {
+        promptID: testPromptIds[0],
+        username: "u1",    
+        title: "Updated Title Prompt Test 1",
+        date: expect.any(String),
+        promptText: "Prompt Text Test 1",
+        comments: "Comment Text Test 1"
+      },
+    });
+  });
 
-//   test("unauth for others", async function () {
-//     const resp = await request(app)
-//         .patch(`/prompts/1`)
-//         .send({
-//           title: "Updated Title Prompt Test 1",
-//         })
-//     expect(resp.statusCode).toEqual(401);
-//   });
+  test("unauth for others", async function () {
+    const resp = await request(app)
+        .patch(`/prompts/${testPromptIds[0]}`)
+        .send({
+          title: "Updated Title Prompt Test 1",
+        })        
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.statusCode).toEqual(400);
+  });
 
-//   test("not found on no such prompt", async function () {
-//     const resp = await request(app)
-//         .patch(`/prompts/0`)
-//         .send({
-//           handle: "new",
-//         })
-//         .set("authorization", `Bearer ${u1Token}`);
-//     expect(resp.statusCode).toEqual(400);
-//   });
+  test("not found or no such prompt", async function () {
+    const resp = await request(app)
+        .patch(`/prompts/999`)
+        .send({
+          title: "Updated Title Prompt Test 1",
+        })
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(404);
+  });
 
-//   test("bad request on handle change attempt", async function () {
-//     const resp = await request(app)
-//         .patch(`/prompts/1`)
-//         .send({
-//           handle: "new",
-//         })
-//         .set("authorization", `Bearer ${u1Token}`);
-//     expect(resp.statusCode).toEqual(400);
-//   });
-
-//   test("bad request with invalid data", async function () {
-//     const resp = await request(app)
-//         .patch(`/prompts/1`)
-//         .send({
-//           title: 7777
-//         })
-//         .set("authorization", `Bearer ${u1Token}`);
-//     expect(resp.statusCode).toEqual(400);
-//   });
-// });
+  test("bad request with invalid data", async function () {
+    const resp = await request(app)
+        .patch(`/prompts/${testPromptIds[0]}`)
+        .send({
+          title: 7777
+        })
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(400);
+  });
+});
 
 // /************************************** DELETE /prompts/:id */
 
-// describe("DELETE /prompts/:id", function () {
-//   test("works", async function () {
-//     const resp = await request(app)
-//         .delete(`/prompts/1`)
-//         .set("authorization", `Bearer ${u1Token}`);
-//     expect(resp.body).toEqual({ deleted: 1 });
-//   });
+describe("DELETE /prompts/:id", function () {
+  test("works", async function () {
+    const resp = await request(app)
+        .delete(`/prompts/${testPromptIds[0]}`)
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.body).toEqual({ deleted: testPromptIds[0] });
+  });
 
-//   test("unauth for others", async function () {
-//     const resp = await request(app)
-//         .delete(`/prompts/1`)
-//         .set("authorization", `Bearer ${u2Token}`);
-//     expect(resp.statusCode).toEqual(401);
-//   });
+  test("unauth for others", async function () {
+    const resp = await request(app)
+        .delete(`/prompts/${testPromptIds[0]}`)
+        .set("authorization", `Bearer ${u2Token}`);
+    expect(resp.statusCode).toEqual(400);
+  });
 
-//   test("unauth for anon", async function () {
-//     const resp = await request(app)
-//         .delete(`/prompts/1`);
-//     expect(resp.statusCode).toEqual(401);
-//   });
+  test("unauth for anon", async function () {
+    const resp = await request(app)
+        .delete(`/prompts/${testPromptIds[0]}`);
+    expect(resp.statusCode).toEqual(401);
+  });
 
-//   test("not found for no such prompt", async function () {
-//     const resp = await request(app)
-//         .delete(`/prompts/0`)
-//         .set("authorization", `Bearer ${u1Token}`);
-//     expect(resp.statusCode).toEqual(404);
-//   });
-// });
+  test("not found for no such prompt", async function () {
+    const resp = await request(app)
+        .delete(`/prompts/999`)
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(404);
+  });
+});

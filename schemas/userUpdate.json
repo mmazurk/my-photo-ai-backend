@@ -4,12 +4,6 @@
     "title": "Root Schema",
     "type": "object",
     "default": {},
-    "required": [
-        "username",
-        "firstName",
-        "lastName",
-        "email"
-    ],
     "properties": {
         "username": {
             "title": "The username Schema",

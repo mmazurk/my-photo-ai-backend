@@ -4,11 +4,6 @@
     "title": "Root Schema",
     "type": "object",
     "default": {},
-    "required": [
-        "title",
-        "prompt_text",
-        "comments"
-    ],
     "properties": {
         "title": {
             "title": "The title Schema",
