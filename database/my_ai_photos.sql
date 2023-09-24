@@ -16,3 +16,6 @@ CREATE DATABASE my_ai_photos_test;
 \connect my_ai_photos_test
 
 \i my_ai_photos_schema.sql
+\connect my_ai_photos
+
+

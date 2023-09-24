@@ -70,4 +70,22 @@ VALUES (
         CURRENT_DATE,
         'Show a mailman being chased by an angry dog',
         'Maybe next time try hanging out in a field?'
+    ), (
+        'user1',
+        'The Mailman',
+        CURRENT_DATE,
+        'Create a picture of a beach on a sunny day',
+        'placeholder'
+    ), (
+        'user2',
+        'The Mailman',
+        CURRENT_DATE,
+        'Make a cartoon that shows two animals grazing in a field',
+        'placeholder'
+    ), (
+        'user3',
+        'The Mailman',
+        CURRENT_DATE,
+        'Create a picture that looks like a Monet painting of Paris',
+        'placeholder'
     );
