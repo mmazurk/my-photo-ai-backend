@@ -9,20 +9,20 @@ INSERT INTO
 VALUES (
         'user1',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
-        'Guzzy',
-        'McDonaldson',
+        'Kathryne',
+        'Schinner',
         'theguzz@test.com'
     ), (
         'user2',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
-        'Markus',
-        'Barkus',
+        'Anderson',
+        'Goodwin',
         'markus@test.com'
     ), (
         'user3',
         '$2b$12$AZH7virni5jlTTiGgEg4zu3lSvAw68qVEfSIOjJ3RqtbJbdW/Oi5q',
-        'Bun',
-        'Bunnterton',
+        'Jasen',
+        'Bartoletti',
         'thebigbun@test.com'
     );
 
@@ -38,7 +38,7 @@ VALUES (
         'user1',
         'Business Men',
         CURRENT_DATE,
-        'Create a picture of businessmen meeting and striking a deal',
+        'Create a picture of businessmen meeting at a cafe and striking a deal',
         'I get better pictures when I am more specific.'
     ), (
         'user2',
