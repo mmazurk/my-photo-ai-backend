@@ -6,7 +6,7 @@ CREATE DATABASE my_ai_photos;
 \connect my_ai_photos
 
 \i my_ai_photos_schema.sql
-\i database_seed.sql
+-- \i database_seed.sql
 
 \echo 'Delete and recreate my_ai_photos_test db?'
 \prompt 'Return for yes or Control-C to cancel >>>> ' reply

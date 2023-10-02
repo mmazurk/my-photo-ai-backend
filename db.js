@@ -5,7 +5,8 @@ const { getDatabaseUri } = require("./config");
 
 let db;
 
-// this is for MacOs
+// added for MacOs
+// -----------------------------
 // if (process.env.NODE_ENV === "production") {
 //   db = new Client({
 //     connectionString: `postgres://postgres:@localhost:5432/${getDatabaseUri()}`,
@@ -20,20 +21,37 @@ let db;
 // }
 
 // added for Ubuntu in WSL2
+// -----------------------------
+// if (process.env.NODE_ENV === "production") {
+//   db = new Client({
+//     host: "/var/run/postgresql/",
+//     database: getDatabaseUri(),
+//     ssl: {
+//       rejectUnauthorized: false
+//     }
+//   });
+// } else {
+//   db = new Client({
+//     host: "/var/run/postgresql/",
+//     database: getDatabaseUri()
+//   });
+// }
+
+// added for deployment
+// -----------------------------
 if (process.env.NODE_ENV === "production") {
   db = new Client({
-    host: "/var/run/postgresql/",
-    database: getDatabaseUri(),
+    connectionString: `${getDatabaseUri()}`,
     ssl: {
       rejectUnauthorized: false
     }
   });
 } else {
   db = new Client({
-    host: "/var/run/postgresql/",
-    database: getDatabaseUri()
+    connectionString: `postgres://postgres:@localhost:5432/${getDatabaseUri()}`
   });
 }
+
 
 db.connect();
 

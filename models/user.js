@@ -1,11 +1,5 @@
 "use strict";
 
-// authenticate (username, password) -> {username, first_name, last_name, email}
-// register ({username, first_name, last_name, email}) -> {username, first_name, last_name, email}
-// findAll() -> returns all users
-// get(username) -> {username, first_name, last_name, email, prompts}
-// update(username, data) -> { username, firstName, lastName, email }
-// remote(username) -> undefined
 
 const db = require("../db");
 const bcrypt = require("bcrypt");

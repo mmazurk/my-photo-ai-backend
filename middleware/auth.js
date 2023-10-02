@@ -61,9 +61,14 @@ function ensureCorrectUser(req, res, next) {
   }
 }
 
+// added to disable route for deployment
+function routeDisabled(req, res, next) {
+  return res.status(403).json({ error: "This route is currently disabled." });
+}
 
 module.exports = {
   authenticateJWT,
   ensureLoggedIn,
   ensureCorrectUser,
+  routeDisabled
 };

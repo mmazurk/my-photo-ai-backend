@@ -12,14 +12,6 @@ const userUpdateSchema = require("../schemas/userUpdate.json");
 const router = express.Router();
 
 
-/** GET /[username] => { user }
- *
- * Returns { username, firstName, lastName, isAdmin, jobs }
- *   where jobs is { id, title, companyHandle, companyName, state }
- *
- * Authorization required: admin or same user-as-:username
- **/
-
 router.get("/:username", ensureCorrectUser, async function (req, res, next) {
   try {
     const user = await User.get(req.params.username);
@@ -29,15 +21,6 @@ router.get("/:username", ensureCorrectUser, async function (req, res, next) {
   }
 });
 
-/** PATCH /[username] { user } => { user }
- *
- * Data can include:
- *   { firstName, lastName, password, email }
- *
- * Returns { username, firstName, lastName, email, isAdmin }
- *
- * Authorization required: admin or same-user-as-:username
- **/
 
 router.patch("/:username", ensureCorrectUser, async function (req, res, next) {
   try {
@@ -55,10 +38,6 @@ router.patch("/:username", ensureCorrectUser, async function (req, res, next) {
 });
 
 
-/** DELETE /[username]  =>  { deleted: username }
- *
- * Authorization required: admin or same-user-as-:username
- **/
 
 router.delete("/:username", ensureCorrectUser, async function (req, res, next) {
   try {
