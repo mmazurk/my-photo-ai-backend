@@ -2,8 +2,39 @@
 
 const { Client } = require("pg");
 const { getDatabaseUri } = require("./config");
+const os = require("os");
 
 let db;
+
+if (os.platform() === "darwin" && !process.env.NODE_ENV) {
+  // macOS development environment
+  db = new Client({
+    connectionString: `postgres://postgres:@localhost:5432/${getDatabaseUri()}`,
+  });
+} else if (os.platform() === "linux" && !process.env.NODE_ENV) {
+  // Ubuntu in WSL2 development environment
+  db = new Client({
+    host: "/var/run/postgresql/",
+    database: getDatabaseUri(),
+  });
+} else if (process.env.NODE_ENV === "production") {
+  // production
+  db = new Client({
+    connectionString: `${getDatabaseUri()}`,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  });
+} else {
+  // Handle other platforms or conditions as needed
+  throw new Error(
+    "Unsupported platform or configuration - check you db.js file."
+  );
+}
+
+db.connect();
+
+module.exports = db;
 
 // added for MacOs
 // -----------------------------
@@ -27,32 +58,27 @@ let db;
 //     host: "/var/run/postgresql/",
 //     database: getDatabaseUri(),
 //     ssl: {
-//       rejectUnauthorized: false
-//     }
+//       rejectUnauthorized: false,
+//     },
 //   });
 // } else {
 //   db = new Client({
 //     host: "/var/run/postgresql/",
-//     database: getDatabaseUri()
+//     database: getDatabaseUri(),
 //   });
 // }
 
 // added for deployment
 // -----------------------------
-if (process.env.NODE_ENV === "production") {
-  db = new Client({
-    connectionString: `${getDatabaseUri()}`,
-    ssl: {
-      rejectUnauthorized: false
-    }
-  });
-} else {
-  db = new Client({
-    connectionString: `postgres://postgres:@localhost:5432/${getDatabaseUri()}`
-  });
-}
-
-
-db.connect();
-
-module.exports = db;
+// if (process.env.NODE_ENV === "production") {
+//   db = new Client({
+//     connectionString: `${getDatabaseUri()}`,
+//     ssl: {
+//       rejectUnauthorized: false
+//     }
+//   });
+// } else {
+//   db = new Client({
+//     connectionString: `postgres://postgres:@localhost:5432/${getDatabaseUri()}`
+//   });
+// }
