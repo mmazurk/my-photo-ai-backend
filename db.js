@@ -6,12 +6,18 @@ const os = require("os");
 
 let db;
 
-if (os.platform() === "darwin" && !process.env.NODE_ENV) {
+if (
+  os.platform() === "darwin" &&
+  (!process.env.NODE_ENV || process.env.NODE_ENV === "test")
+) {
   // macOS development environment
   db = new Client({
     connectionString: `postgres://postgres:@localhost:5432/${getDatabaseUri()}`,
   });
-} else if (os.platform() === "linux" && !process.env.NODE_ENV) {
+} else if (
+  os.platform() === "linux" &&
+  (!process.env.NODE_ENV || process.env.NODE_ENV === "test")
+) {
   // Ubuntu in WSL2 development environment
   db = new Client({
     host: "/var/run/postgresql/",
@@ -28,7 +34,7 @@ if (os.platform() === "darwin" && !process.env.NODE_ENV) {
 } else {
   // Handle other platforms or conditions as needed
   throw new Error(
-    "Unsupported platform or configuration - check you db.js file."
+    "Unsupported platform or configuration - check your db.js file."
   );
 }
 
@@ -67,6 +73,10 @@ module.exports = db;
 //     database: getDatabaseUri(),
 //   });
 // }
+
+// db.connect();
+
+// module.exports = db;
 
 // added for deployment
 // -----------------------------

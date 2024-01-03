@@ -13,12 +13,11 @@ const userRegisterSchema = require("../schemas/userRegister.json");
 const { BadRequestError } = require("../expressError");
 const { routeDisabled } = require("../middleware/auth");
 
-
 router.post("/token", async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userAuthSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
@@ -31,7 +30,6 @@ router.post("/token", async function (req, res, next) {
   }
 });
 
-
 // I add the middleware 'routeDisabled' to turn this off
 // remove this to turn it back on
 
@@ -39,7 +37,7 @@ router.post("/register", routeDisabled, async function (req, res, next) {
   try {
     const validator = jsonschema.validate(req.body, userRegisterSchema);
     if (!validator.valid) {
-      const errs = validator.errors.map(e => e.stack);
+      const errs = validator.errors.map((e) => e.stack);
       throw new BadRequestError(errs);
     }
 
@@ -50,6 +48,5 @@ router.post("/register", routeDisabled, async function (req, res, next) {
     return next(err);
   }
 });
-
 
 module.exports = router;
